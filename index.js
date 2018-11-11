@@ -3,25 +3,25 @@
 const minimist = require('minimist')
 const {
   splitAllVideos
-} = require('./src/split-video-file')
+} = require('./src/split-pipeline')
 
 const createOutputDirectory = require('./src/create-output-directory')
 
 const argv = minimist(process.argv.slice(2))
 
+const toOptions = (argv) => ({
+  inputDir: argv['d'],
+  inputFile: argv['i'],
+  outputDir: argv['o'] || './output'
+})
+
+const options = toOptions(argv)
+
 try {
-  const inputDir = argv['d']
-  const inputFile = argv['i']
-  const outputDir = argv['o'] || './output'
-
   // create the output directory if needed
-  createOutputDirectory(outputDir)
+  createOutputDirectory(options.outputDir)
 
-  splitAllVideos({
-    inputDir,
-    inputFile,
-    outputDir
-  })
+  splitAllVideos(toOptions(argv))
 } catch (error) {
   console.error('Unhandled exception: ', {
     error

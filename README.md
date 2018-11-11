@@ -1,5 +1,10 @@
-# Node Project Template
+# Split a video or directory of videos into their frames using ffmpeg.
 
-## Why
+## Todo
 
-I wanted a decent Node.js new project template.
+- Add tests
+- Add addition output format besides .png
+- Add scaling
+- Convert IO to use the IO monad
+- Port to Typescript
+- Investigate concurrency
