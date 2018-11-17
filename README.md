@@ -6,5 +6,4 @@
 - Add addition output format besides .png
 - Add scaling
 - Convert IO to use the IO monad
-- Port to Typescript
 - Investigate concurrency
