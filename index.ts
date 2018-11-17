@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 
-const minimist = require('minimist')
-const {
+import minimist from 'minimist'
+import {
   splitAllVideos
-} = require('./src/split-pipeline')
+} from './src/split-pipeline'
 
-const createOutputDirectory = require('./src/create-output-directory')
+const {
+  createOutputDirectory
+} from './src/create-output-directory'
 
 const argv = minimist(process.argv.slice(2))
 

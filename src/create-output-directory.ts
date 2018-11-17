@@ -1,6 +1,6 @@
-const fs = require('fs')
+import fs from 'fs'
 
-const createOutputDirectory = (outputDir) => {
+const createOutputDirectory = (outputDir: string) => {
   try {
     fs.mkdirSync(outputDir)
     console.log(`Created output directory '${outputDir}'`)
@@ -11,4 +11,7 @@ const createOutputDirectory = (outputDir) => {
   }
 }
 
-module.exports = createOutputDirectory
+export {
+  createOutputDirectory
+}
+
