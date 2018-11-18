@@ -1,22 +1,10 @@
-import Bluebird from 'bluebird'
-import {
-  curry
-} from 'lodash'
-import {
-  Either
-} from 'monet'
+import { curry } from 'lodash'
+import { Either } from 'monet'
 import path from 'path'
-import {
-  readDir
-} from './read-dir'
-import {
-  splitSingleVideoToImages
-} from './split-video-file'
+import { readDir } from './read-dir'
+import { splitSingleVideoToImages } from './split-video-file'
 
-const {
-  Right,
-  Left
-} = Either
+const { Right, Left } = Either
 
 /**
  * List of valid video file extensions
@@ -27,9 +15,7 @@ const videoExtensions: string[] = ['mp4', 'avi', 'mov', 'gif', 'mkv']
  * Extract the extension from a filename
  */
 const getExtension = (filename: string) => {
-  const {
-    ext
-  } = path.parse(filename)
+  const { ext } = path.parse(filename)
   const [, extNoDot] = ext.split('.')
   return extNoDot ? extNoDot.toLowerCase() : ''
 }
@@ -46,14 +32,10 @@ const isVideoFile = (extensions: string[]) => (filename: string) => {
  * the results in an output directory
  */
 const executeSplitFilelist = (outputDir: string, videoFilenames: string[]) => {
-  return Promise.all(
-    videoFilenames.map((filename) => splitSingleVideoToImages(outputDir, filename))
-  )
+  return Promise.all(videoFilenames.map((filename) => splitSingleVideoToImages(outputDir, filename)))
 }
 
-const splitVideosPipeline = async (options: any) => {
-  const { inputDir, inputFile, outputDir } = options
-
+const splitVideosPipeline = async ({ inputDir, inputFile, outputDir }: any) => {
   const eitherInputOrDir = (file: string, dir: string): Either<string, string> => {
     return !file ? Left(dir) : Right(file)
   }
@@ -65,23 +47,14 @@ const splitVideosPipeline = async (options: any) => {
       (filename: string): Promise<string[]> => Promise.resolve([filename])
     )
     .then((list: string[]) => list.filter(isVideoFile(videoExtensions)))
-    .then((list: string[]) =>
-      list.map((filename: string) => (inputDir ? `${inputDir}/${filename}` : filename))
-    )
+    .then((list: string[]) => list.map((filename: string) => (inputDir ? `${inputDir}/${filename}` : filename)))
     .then((list: string[]) => (list.length > 0 ? Right(list) : Left(new Error('empty file list'))))
-    .then((eitherFilelistOrError: Either < Error, string[] > ) => {
+    .then((eitherFilelistOrError: Either<Error, string[]>) => {
       return eitherFilelistOrError.cata(
-        (error: Error) => console.error({
-          error
-        }, `Unable to split the file list`),
+        (error: Error) => console.error({ error }, `Unable to split the file list`),
         (list: string[]) => executeSplitFilelist(outputDir, list)
       )
     })
 }
 
-export {
-  splitVideosPipeline,
-  splitSingleVideoToImages,
-  getExtension,
-  isVideoFile
-}
+export { splitVideosPipeline, splitSingleVideoToImages, getExtension, isVideoFile }

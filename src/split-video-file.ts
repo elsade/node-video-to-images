@@ -1,8 +1,7 @@
-import Promise from 'bluebird'
 import ffmpeg from 'fluent-ffmpeg'
 import path from 'path'
 
-const splitSingleVideoToImages = (imageOutputDir: string, filename: string) => {
+const splitSingleVideoToImages = (imageOutputDir: string, filename: string): Promise<{}> => {
   const { name } = path.parse(filename)
   const lowercaseName = name.toLowerCase()
   const outputFilenamePattern = `${imageOutputDir}/${lowercaseName}-frame-%d.png`
